@@ -33,13 +33,15 @@ export const PlanChart = ({ data }: { data: CalcData }) => {
             <p className="text-gray-500">退休时累计可领</p>
 
             <CountUp
-              end={1000000}
+              end={data.receiptAmount}
               duration={1}
               prefix="$"
               className="text-2xl font-bold"
             />
 
-            <p className="text-gray-300">每年保证可领取$XXX</p>
+            <p className="text-gray-300">
+              每月可领取${data.retireMonthAmount.toFixed(2)}
+            </p>
           </div>
 
           <div className="w-[1px] h-16 bg-gray-300"></div>

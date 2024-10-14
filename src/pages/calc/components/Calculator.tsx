@@ -29,16 +29,16 @@ import {
 export const formSchema = z.object({
   token: z.enum(["usdt", "btc", "eth"]),
   frequency: z.enum(["monthly", "yearly"]),
-  rate: z.number().min(0.01, {
+  rate: z.coerce.number().min(0.01, {
     message: "Rate must be at least 0.01.",
   }),
-  amount: z.number().min(100, {
+  amount: z.coerce.number().min(100, {
     message: "Amount must be at least 100.",
   }),
-  retire: z.number().min(1, {
+  retire: z.coerce.number().min(1, {
     message: "Retire must be at least 1.",
   }),
-  years: z.number().min(1, {
+  years: z.coerce.number().min(1, {
     message: "Years must be at least 1.",
   }),
 });
@@ -91,7 +91,8 @@ export const Calculator = ({
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue="usdt"
+                        {...field}
+                        value={field.value as string}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="选择投保标的" />
@@ -120,7 +121,8 @@ export const Calculator = ({
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue="monthly"
+                        {...field}
+                        value={field.value as string}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="选择投保方案" />
