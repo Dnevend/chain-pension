@@ -33,13 +33,13 @@ export const Layout = () => {
       <Background />
 
       <div className={"relative inset-0 w-screen flex flex-col min-h-screen"}>
-        <header className="flex items-center justify-between px-12 py-4">
+        <header className="flex items-center justify-between px-4 sm:px-12 py-4">
           <div className="flex items-center">
-            <Link to="/" className="text-black text-2xl font-bold">
+            <Link to="/" className="text-black text-xl sm:text-2xl font-bold">
               ChainPension
             </Link>
 
-            <menu className="px-6">
+            <menu className="px-6 hidden sm:block">
               <ul className="flex gap-4">
                 {menus.map((menu) => (
                   <li key={menu.path} className="h-4">
