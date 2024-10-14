@@ -4,6 +4,7 @@ import { AmountChart } from "./AmountChart";
 import { useState } from "react";
 import CountUp from "react-countup";
 import type { CalcData } from "@/hooks/useCalc";
+import emptyImage from "@/assets/digital-nomad.svg";
 
 type CardTab = "amount" | "detail";
 
@@ -67,7 +68,11 @@ export const PlanChart = ({ data }: { data: CalcData }) => {
           </CardContent>
         )}
 
-        {currentTab === "detail" && <CardContent>领取详情</CardContent>}
+        {currentTab === "detail" && (
+          <CardContent className="flex items-center justify-center">
+            <img src={emptyImage} className="w-4/5 h-full" />
+          </CardContent>
+        )}
       </Card>
     </div>
   );
