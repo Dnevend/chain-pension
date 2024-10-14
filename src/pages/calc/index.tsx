@@ -7,8 +7,8 @@ const Bill = () => {
   const [params, setParams] = useState<z.infer<typeof formSchema>>({
     token: "usdt",
     frequency: "monthly",
-    rate: 0.01,
-    amount: 100,
+    rate: 0.05,
+    amount: 1000,
     retire: 35,
     years: 25,
   });
@@ -26,7 +26,7 @@ const Bill = () => {
   });
 
   return (
-    <div className="max-w-screen-md mx-auto flex flex-col sm:flex-row items-start justify-around gap-12 py-12 w-full">
+    <div className="max-w-screen-lg mx-auto flex flex-col sm:flex-row items-start justify-around gap-12 py-12">
       <Calculator onCalc={onCalc} />
       <PlanChart data={data} />
     </div>

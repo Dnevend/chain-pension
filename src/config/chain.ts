@@ -12,7 +12,7 @@ export const chainConfig = createConfig(
         },
 
         // Required API Keys
-        walletConnectProjectId: "TODO:",
+        walletConnectProjectId: "30e767d5912dfeb521965a3b57169f4f",
 
         // Required App Info
         appName: "ChainPension",

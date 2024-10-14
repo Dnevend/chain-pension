@@ -12,7 +12,7 @@ export const PlanChart = ({ data }: { data: CalcData }) => {
   const [currentTab, setCurrentTab] = useState<CardTab>("amount");
 
   return (
-    <div className="w-96 flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-2">
       <Tabs
         defaultValue="amount"
         className="w-full"

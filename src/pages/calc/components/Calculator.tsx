@@ -65,7 +65,7 @@ export const Calculator = ({
   };
 
   return (
-    <Card className="w-96">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CalculatorIcon />
