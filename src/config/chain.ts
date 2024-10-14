@@ -2,7 +2,7 @@ import { mainnet, sepolia } from 'wagmi/chains'
 import { createConfig, http } from "wagmi";
 import { getDefaultConfig } from "connectkit";
 
-export const config = createConfig(
+export const chainConfig = createConfig(
     getDefaultConfig({
         chains: [mainnet, sepolia],
 
