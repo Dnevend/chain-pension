@@ -8,18 +8,29 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const chartData = [
-  { title: "累计投入", amount: 12000 },
-  { title: "至85岁可领取", amount: 32500 },
-];
-
 const chartConfig = {
   amount: {
     label: "金额",
   },
 } satisfies ChartConfig;
 
-export function AmountChart() {
+export function AmountChart({
+  input,
+  output,
+  total,
+  ratio,
+}: {
+  input: number;
+  output: number;
+  total: number;
+  ratio: number;
+}) {
+  const chartData = [
+    { title: "累计投入", amount: input.toFixed(2) },
+    { title: "退休时可领取", amount: output.toFixed(2) },
+    { title: "累计可领取", amount: total.toFixed(2) },
+  ];
+
   return (
     <div className="flex flex-col gap-2">
       <ChartContainer config={chartConfig}>
@@ -57,7 +68,7 @@ export function AmountChart() {
       </ChartContainer>
 
       <div className="flex gap-2 font-medium leading-none">
-        Total up 5.2% <TrendingUp className="h-4 w-4" />
+        Total up {ratio.toFixed(2)}% <TrendingUp className="h-4 w-4" />
       </div>
     </div>
   );

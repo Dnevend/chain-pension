@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { useForm, ControllerRenderProps } from "react-hook-form";
 import { Calculator as CalculatorIcon } from "lucide-react";
 import { z } from "zod";
 import {
@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const formSchema = z.object({
+export const formSchema = z.object({
   token: z.enum(["usdt", "btc", "eth"]),
   frequency: z.enum(["monthly", "yearly"]),
   rate: z.number().min(0.01, {
@@ -35,25 +35,33 @@ const formSchema = z.object({
   amount: z.number().min(100, {
     message: "Amount must be at least 100.",
   }),
+  retire: z.number().min(1, {
+    message: "Retire must be at least 1.",
+  }),
   years: z.number().min(1, {
     message: "Years must be at least 1.",
   }),
 });
 
-export const Calculator = () => {
+export const Calculator = ({
+  onCalc,
+}: {
+  onCalc: (data: z.infer<typeof formSchema>) => void;
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       token: "usdt",
       frequency: "monthly",
-      rate: 0.08,
+      rate: 0.05,
       amount: 1000,
-      years: 10,
+      retire: 35,
+      years: 25,
     },
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    onCalc(data);
   };
 
   return (
@@ -73,7 +81,11 @@ export const Calculator = () => {
               <FormField
                 control={form.control}
                 name="token"
-                render={({ field }) => (
+                render={({
+                  field,
+                }: {
+                  field: ControllerRenderProps<z.infer<typeof formSchema>>;
+                }) => (
                   <FormItem>
                     <FormLabel>投保标的</FormLabel>
                     <FormControl>
@@ -98,7 +110,11 @@ export const Calculator = () => {
               <FormField
                 control={form.control}
                 name="frequency"
-                render={({ field }) => (
+                render={({
+                  field,
+                }: {
+                  field: ControllerRenderProps<z.infer<typeof formSchema>>;
+                }) => (
                   <FormItem>
                     <FormLabel>投保频率</FormLabel>
                     <FormControl>
@@ -124,7 +140,11 @@ export const Calculator = () => {
               <FormField
                 control={form.control}
                 name="amount"
-                render={({ field }) => (
+                render={({
+                  field,
+                }: {
+                  field: ControllerRenderProps<z.infer<typeof formSchema>>;
+                }) => (
                   <FormItem>
                     <FormLabel>投保金额</FormLabel>
                     <FormControl>
@@ -141,7 +161,11 @@ export const Calculator = () => {
               <FormField
                 control={form.control}
                 name="rate"
-                render={({ field }) => (
+                render={({
+                  field,
+                }: {
+                  field: ControllerRenderProps<z.infer<typeof formSchema>>;
+                }) => (
                   <FormItem>
                     <FormLabel>年利率</FormLabel>
                     <FormControl>
@@ -157,8 +181,12 @@ export const Calculator = () => {
 
               <FormField
                 control={form.control}
-                name="years"
-                render={({ field }) => (
+                name="retire"
+                render={({
+                  field,
+                }: {
+                  field: ControllerRenderProps<z.infer<typeof formSchema>>;
+                }) => (
                   <FormItem>
                     <FormLabel>退休时间</FormLabel>
                     <FormControl>
@@ -175,7 +203,11 @@ export const Calculator = () => {
               <FormField
                 control={form.control}
                 name="years"
-                render={({ field }) => (
+                render={({
+                  field,
+                }: {
+                  field: ControllerRenderProps<z.infer<typeof formSchema>>;
+                }) => (
                   <FormItem>
                     <FormLabel>领取年份</FormLabel>
                     <FormControl>

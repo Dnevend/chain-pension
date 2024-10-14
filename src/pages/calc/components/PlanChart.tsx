@@ -3,10 +3,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AmountChart } from "./AmountChart";
 import { useState } from "react";
 import CountUp from "react-countup";
+import type { CalcData } from "@/hooks/useCalc";
 
 type CardTab = "amount" | "detail";
 
-export const PlanChart = () => {
+export const PlanChart = ({ data }: { data: CalcData }) => {
   const [currentTab, setCurrentTab] = useState<CardTab>("amount");
 
   return (
@@ -29,9 +30,7 @@ export const PlanChart = () => {
       <Card>
         <div className="w-full flex items-center justify-between">
           <div className="flex flex-col gap-1 p-4">
-            <p className="text-gray-500">
-              至<strong className="text-xl">85</strong>岁累计可领
-            </p>
+            <p className="text-gray-500">退休时累计可领</p>
 
             <CountUp
               end={1000000}
@@ -49,14 +48,20 @@ export const PlanChart = () => {
             <p className="text-gray-500">领取倍数</p>
 
             <p className="text-2xl font-bold text-orange-500">
-              3<span className="text-sm">倍</span>
+              {data.ratio.toFixed(2)}
+              <span className="text-sm">倍</span>
             </p>
           </div>
         </div>
 
         {currentTab === "amount" && (
           <CardContent>
-            <AmountChart />
+            <AmountChart
+              input={data.investAmount}
+              output={data.retireAmount}
+              total={data.receiptAmount}
+              ratio={data.ratio}
+            />
           </CardContent>
         )}
 
