@@ -40,7 +40,9 @@ const Bill = () => {
     args: [0n, 100n]
   })
 
-  const validBills = (bills || [])?.filter((bill: {owner: string}) => bill.owner === address)
+  const validBills = (bills || [])?.map((it,index) => ({
+    ...it,
+    id:index}))?.filter((bill: {owner: string}) => bill.owner === address)
   console.log("🐞 => Bill => validBills:", validBills);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -122,9 +124,7 @@ const Bill = () => {
             <BillCard 
               key={bill.startTime} 
               bill={bill}
-              onClick={() => {
-                setOpen(true);
-                }}
+              onRefresh={() => getBills()}
             />
           ))
         )}

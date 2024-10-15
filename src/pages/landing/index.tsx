@@ -44,9 +44,8 @@ const Landing = () => {
           </div>
 
           <div className="mt-5 max-w-3xl text-center mx-auto">
-            <p>基于链上的养老基金项目</p>
             <p className="text-lg text-gray-600 dark:text-neutral-400">
-              待补充：利用区块链及ZK证明，实现链上养老金...确保数据透明...利率...
+              区块链结合零知识证明，全面保障您的隐私与安全。
             </p>
           </div>
 

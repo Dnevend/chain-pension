@@ -4,10 +4,21 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardFooter,
 } from "@/components/ui/card";
 import dayjs from "dayjs";
+import { useState } from "react";
+import { CircleDashed } from "lucide-react";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ADDRESS } from "@/config";
+import { abi } from "@/config/abi/pension";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import FundTable from "./FundTable";
+import store from "store2";
+import { toast } from "react-hot-toast";
 
 export type Bill = {
+  id: number;
   owner: string;
   // 是否关闭
   closed: boolean;
@@ -29,43 +40,131 @@ export type Bill = {
   startTime: bigint;
 };
 
-export const BillCard = ({
-  bill,
-  onClick,
-}: {
-  bill: Bill;
-  onClick: () => void;
-}) => (
-  <Card
-    onClick={onClick}
-    className="bg-gradient-to-r from-slate-900 to-slate-700 text-slate-200 cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-300"
-  >
-    <CardHeader>
-      <CardTitle className="flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
-        <img
-          src="https://cryptologos.cc/logos/ethereum-eth-logo.svg"
-          className="w-4 h-4 mr-2"
-        />
-        ETH Pension Bill
-      </CardTitle>
-      <CardDescription>{bill.owner}</CardDescription>
-    </CardHeader>
+export const BillCard = ({ bill, onRefresh }: { bill: Bill, onRefresh: () => void }) => {
+  const [fundSelecting, setFundSelecting] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [closing, setClosing] = useState(false);
 
-    <CardContent>
-      <div>{bill.closed}</div>
-      <p>
-        Pay Month: {String(bill.payedMonths)} / {String(bill.payMonths)}
-      </p>
-      <div className="flex items-center justify-between">
-        <span>
-          $<span className="text-xl font-bold">{Number(bill.payAmount)}</span> /
-          Month
-        </span>
+  const { writeContractAsync } = useWriteContract();
+  const [billFunds, setBillFunds] = useState<{id: number, fund: string, rate: string}[]>(store.get("bill-fund", []));
+  const currentFund = billFunds.find(item => item.id === bill.id);
 
-        <span>
-          {dayjs(Number(String(bill.startTime + `000`))).format("YYYY-MM-DD")}
-        </span>
-      </div>
-    </CardContent>
-  </Card>
-);
+  const onPay = async () => {
+    try{
+      console.log('onPay', bill.id)
+      setPaying(true);
+      await writeContractAsync({
+        address: CONTRACT_ADDRESS.Pension as `0x${string}`,
+        abi: abi,
+        functionName: "payBill",
+        args: [BigInt(bill.id)],
+        value: bill.payAmount,
+      });
+      toast.success("缴费成功!");
+      onRefresh();
+    } finally {
+      setPaying(false);
+    }
+  };
+
+  const onClose = async () => {
+    try{
+      console.log('onClose', bill.id)
+      setClosing(true);
+      await writeContractAsync({
+        address: CONTRACT_ADDRESS.Pension as `0x${string}`,
+        abi: abi,
+        functionName: "closeBill",
+        args: [BigInt(bill.id)],
+      });
+      toast.success("关闭成功!");
+      onRefresh();
+    } finally {
+      setClosing(false);
+    }
+  };
+
+  return (
+    <Card className="bg-gradient-to-r from-slate-900 to-slate-700 text-slate-200 hover:shadow-lg hover:scale-105 transition-all duration-300">
+      <CardHeader>
+        <CardTitle className="flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+          <img
+            src="https://cryptologos.cc/logos/ethereum-eth-logo.svg"
+            className="w-4 h-4 mr-2"
+          />
+          ETH Pension Bill
+        </CardTitle>
+        <CardDescription>{bill.owner}</CardDescription>
+      </CardHeader>
+
+      <CardContent>
+        <div>{bill.closed}</div>
+        <p>
+          Pay Month: {String(bill.payedMonths)} / {String(bill.payMonths)}
+        </p>
+        <div className="flex items-center justify-between">
+          <span>
+            $<span className="text-xl font-bold">{Number(bill.payAmount)}</span>{" "}
+            / Month
+          </span>
+
+          <span>
+            {dayjs(Number(String(bill.startTime + `000`))).format("YYYY-MM-DD")}
+          </span>
+        </div>
+      </CardContent>
+
+      <div className="h-[1px] w-full bg-slate-500 opacity-50 my-2" />
+
+      {!bill.closed ? (
+        <CardFooter className="flex justify-around">
+          <div role="button" className="bg-none hover:font-bold" onClick={onPay}>
+            {paying ? <CircleDashed className="animate-spin" /> : "缴费"}
+          </div>
+
+          <div className="w-[1px] h-4 bg-slate-500 opacity-50" />
+
+          <div 
+            role="button"
+            className="bg-none hover:font-bold"
+            onClick={() => {
+              setFundSelecting(true);
+            }}
+          >
+            {currentFund ? `${currentFund.fund}(${currentFund.rate})` : "选择基金"}
+          </div>
+
+          <div className="w-[1px] h-4 bg-slate-500 opacity-50" />
+
+          <div
+            role="button"
+            className="bg-none text-red-200 hover:font-bold"
+            onClick={onClose}
+          >
+            {closing ? <CircleDashed className="animate-spin" /> : "关闭"}
+          </div>
+        </CardFooter>
+      ): (
+        <CardFooter className="flex justify-around">
+          <p className="text-red-600 font-bold">保单已关闭</p>
+        </CardFooter>
+      )}
+
+      <Dialog open={fundSelecting} onOpenChange={(v) => setFundSelecting(v)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>选择基金</DialogTitle>
+          </DialogHeader>
+          <FundTable 
+            id={bill.id}
+            refresh={() => {
+              toast.success("Success!");
+              setBillFunds(store.get("bill-fund", []));
+              setFundSelecting(false);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+    </Card>
+  );
+};
