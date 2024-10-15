@@ -64,7 +64,7 @@ const Landing = () => {
             <div className="w-[1px] h-12 bg-gray-500" />
             <div className="flex flex-col items-center">
               <CountUp
-                end={8848}
+                end={884800}
                 duration={2.75}
                 prefix="$"
                 className="text-2xl font-bold"
