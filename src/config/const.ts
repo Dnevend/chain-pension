@@ -10,7 +10,8 @@ export const CONTRACT_ADDRESS = {
 };
 
 export const PUBLIC_URL = {
-    Website: "https://chainpension.com",
+    Website: "https://chain-pension.pages.dev",
+    ProjectRepo: "https://github.com/33357/chain-pension-evm",
     FrontRepo: "https://github.com/Dnevend/chain-pension",
     ContractRepo: "https://github.com/Dnevend/chain-pension-contract",
     ContractAddress: `https://sepolia.etherscan.io/address/${CONTRACT_ADDRESS.Pension}`
