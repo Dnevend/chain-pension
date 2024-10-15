@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 import { ExternalLink, ChevronRight } from "lucide-react";
 import { GlobeDemo } from "./components/Globe";
 import { PUBLIC_URL } from "@/config";
+import CountUp from "react-countup";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const Landing = () => {
   return (
@@ -47,6 +54,29 @@ const Landing = () => {
             <p className="text-lg text-gray-600 dark:text-neutral-400">
               区块链结合零知识证明，全面保障您的隐私与安全。
             </p>
+          </div>
+
+          <div className="my-5 max-w-96 mx-auto flex justify-around items-center">
+            <div className="flex flex-col items-center">
+              <CountUp
+                end={235}
+                duration={2.75}
+                className="text-2xl font-bold"
+              />
+              <p className="text-sm text-gray-600 dark:text-neutral-400">
+                链上保单数
+              </p>
+            </div>
+            <div className="w-[1px] h-12 bg-gray-500" />
+            <div className="flex flex-col items-center">
+              <CountUp
+                end={8848}
+                duration={2.75}
+                prefix="$"
+                className="text-2xl font-bold"
+              />
+              <p>链上保单金额</p>
+            </div>
           </div>
 
           <div className="mt-8 gap-3 flex justify-center">
