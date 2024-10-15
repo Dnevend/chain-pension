@@ -7,6 +7,7 @@ const Bill = () => {
   const [params, setParams] = useState<z.infer<typeof formSchema>>({
     token: "usdt",
     frequency: "monthly",
+    investYears: 10,
     rate: 0.05,
     amount: 1000,
     retire: 35,
@@ -19,7 +20,7 @@ const Bill = () => {
 
   const data = useCalc({
     investMonthAmount: params.amount,
-    investYears: 10,
+    investYears: params.investYears,
     yearRate: params.rate,
     retireYears: params.retire,
     receiptYears: params.years,

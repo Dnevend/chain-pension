@@ -68,7 +68,7 @@ export function AmountChart({
       </ChartContainer>
 
       <div className="flex gap-2 font-medium leading-none">
-        Total up {ratio.toFixed(2)}% <TrendingUp className="h-4 w-4" />
+        Total up {(ratio * 100).toFixed(2)}% <TrendingUp className="h-4 w-4" />
       </div>
     </div>
   );

@@ -32,6 +32,9 @@ export const formSchema = z.object({
   rate: z.coerce.number().min(0.01, {
     message: "Rate must be at least 0.01.",
   }),
+  investYears: z.coerce.number().min(1, {
+    message: "Invest years must be at least 1.",
+  }),
   amount: z.coerce.number().min(100, {
     message: "Amount must be at least 100.",
   }),
@@ -53,6 +56,7 @@ export const Calculator = ({
     defaultValues: {
       token: "usdt",
       frequency: "monthly",
+      investYears: 10,
       rate: 0.05,
       amount: 1000,
       retire: 35,
@@ -141,6 +145,27 @@ export const Calculator = ({
 
               <FormField
                 control={form.control}
+                name="investYears"
+                render={({
+                  field,
+                }: {
+                  field: ControllerRenderProps<z.infer<typeof formSchema>>;
+                }) => (
+                  <FormItem>
+                    <FormLabel>投保年限</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="输入投保年限"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="amount"
                 render={({
                   field,
@@ -174,6 +199,7 @@ export const Calculator = ({
                       <Input
                         type="number"
                         placeholder="输入年利率"
+                        step="0.01"
                         {...field}
                       />
                     </FormControl>
@@ -190,7 +216,7 @@ export const Calculator = ({
                   field: ControllerRenderProps<z.infer<typeof formSchema>>;
                 }) => (
                   <FormItem>
-                    <FormLabel>退休时间</FormLabel>
+                    <FormLabel>多少年后退休</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -211,11 +237,11 @@ export const Calculator = ({
                   field: ControllerRenderProps<z.infer<typeof formSchema>>;
                 }) => (
                   <FormItem>
-                    <FormLabel>领取年份</FormLabel>
+                    <FormLabel>领取年数</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder="输入领取年份"
+                        placeholder="输入领取年数"
                         {...field}
                       />
                     </FormControl>
