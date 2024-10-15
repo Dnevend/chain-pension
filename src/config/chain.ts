@@ -1,13 +1,13 @@
-import { mainnet, sepolia } from 'wagmi/chains'
+import { sepolia } from 'wagmi/chains'
 import { createConfig, http } from "wagmi";
 import { getDefaultConfig } from "connectkit";
 
 export const chainConfig = createConfig(
     getDefaultConfig({
-        chains: [mainnet, sepolia],
+        chains: [sepolia],
 
         transports: {
-            [mainnet.id]: http(),
+            // [mainnet.id]: http(),
             [sepolia.id]: http(),
         },
 
