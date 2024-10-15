@@ -9,7 +9,7 @@ import {
 import dayjs from "dayjs";
 import { useState } from "react";
 import { CircleDashed } from "lucide-react";
-import { useWriteContract } from "wagmi";
+import { useReadContract, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS } from "@/config";
 import { abi } from "@/config/abi/pension";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -44,13 +44,25 @@ export const BillCard = ({ bill, onRefresh }: { bill: Bill, onRefresh: () => voi
   const [fundSelecting, setFundSelecting] = useState(false);
   const [paying, setPaying] = useState(false);
   const [closing, setClosing] = useState(false);
-
+  const { data: nextPayTime } = useReadContract({
+    abi,
+    address: CONTRACT_ADDRESS.Pension as `0x${string}`,
+    functionName: "getNextPayTime",
+    args: [BigInt(bill.id)]
+  })
   const { writeContractAsync } = useWriteContract();
   const [billFunds, setBillFunds] = useState<{id: number, fund: string, rate: string}[]>(store.get("bill-fund", []));
   const currentFund = billFunds.find(item => item.id === bill.id);
 
+  const payable = nextPayTime && dayjs().isAfter(dayjs(Number(String(nextPayTime + `000`))));
+
   const onPay = async () => {
     try{
+      if(!payable) {
+        toast.error("未到缴费时间!");
+        return;
+      }
+      
       console.log('onPay', bill.id)
       setPaying(true);
       await writeContractAsync({
@@ -94,7 +106,7 @@ export const BillCard = ({ bill, onRefresh }: { bill: Bill, onRefresh: () => voi
           />
           ETH Pension Bill
         </CardTitle>
-        <CardDescription>{bill.owner}</CardDescription>
+        <CardDescription className="line-clamp-1">受益人: {bill.owner}</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -119,7 +131,17 @@ export const BillCard = ({ bill, onRefresh }: { bill: Bill, onRefresh: () => voi
       {!bill.closed ? (
         <CardFooter className="flex justify-around">
           <div role="button" className="bg-none hover:font-bold" onClick={onPay}>
-            {paying ? <CircleDashed className="animate-spin" /> : "缴费"}
+          
+            {payable ? (
+              <>
+                {paying ? <CircleDashed className="animate-spin" /> : "缴费"}
+              </>
+            ) : (
+              <div className="flex flex-col items-center">
+                <p>{dayjs(Number(String(nextPayTime + `000`))).format("YYYY-MM-DD")}</p>
+                <p className="text-xs">下次缴费</p>
+              </div>
+            )}
           </div>
 
           <div className="w-[1px] h-4 bg-slate-500 opacity-50" />

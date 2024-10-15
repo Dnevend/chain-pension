@@ -15,12 +15,12 @@ const Background = () => {
 export const Layout = () => {
   const menus = [
     {
-      name: "方案预算",
-      path: "/calc",
-    },
-    {
       name: "投保",
       path: "/bill",
+    },
+    {
+      name: "方案预算",
+      path: "/calc",
     },
     // {
     //   name: "基金",

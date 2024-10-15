@@ -64,6 +64,7 @@ const Bill = () => {
         BigInt(data.years) * 12n,
       ],
     });
+    
     setOpen(false);
     getBills();
   };

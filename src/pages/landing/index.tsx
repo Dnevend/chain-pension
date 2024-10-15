@@ -3,12 +3,6 @@ import { ExternalLink, ChevronRight } from "lucide-react";
 import { GlobeDemo } from "./components/Globe";
 import { PUBLIC_URL } from "@/config";
 import CountUp from "react-countup";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 
 const Landing = () => {
   return (
