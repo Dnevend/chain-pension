@@ -134,7 +134,7 @@ export const BillForm = ({
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="rate"
             render={({
@@ -149,7 +149,7 @@ export const BillForm = ({
                 </FormControl>
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
