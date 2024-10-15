@@ -24,6 +24,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "connectkit": "^1.8.2",
+    "dayjs": "^1.11.13",
     "framer-motion": "^11.11.8",
     "lucide-react": "^0.452.0",
     "mini-svg-data-uri": "^1.4.4",

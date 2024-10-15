@@ -22,10 +22,10 @@ export const Layout = () => {
       name: "投保",
       path: "/bill",
     },
-    {
-      name: "基金",
-      path: "/fund",
-    },
+    // {
+    //   name: "基金",
+    //   path: "/fund",
+    // },
   ];
 
   return (

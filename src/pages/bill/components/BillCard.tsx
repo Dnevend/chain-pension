@@ -5,6 +5,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import dayjs from "dayjs";
 
 export type Bill = {
   owner: string;
@@ -28,17 +29,43 @@ export type Bill = {
   startTime: bigint;
 };
 
-export const BillCard = ({ bill }: { bill: Bill }) => (
-  <Card className="cursor-pointer hover:shadow-md transition-all duration-300">
+export const BillCard = ({
+  bill,
+  onClick,
+}: {
+  bill: Bill;
+  onClick: () => void;
+}) => (
+  <Card
+    onClick={onClick}
+    className="bg-gradient-to-r from-slate-900 to-slate-700 text-slate-200 cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-300"
+  >
     <CardHeader>
-      <CardTitle>ETH Pension Bill</CardTitle>
+      <CardTitle className="flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+        <img
+          src="https://cryptologos.cc/logos/ethereum-eth-logo.svg"
+          className="w-4 h-4 mr-2"
+        />
+        ETH Pension Bill
+      </CardTitle>
       <CardDescription>{bill.owner}</CardDescription>
     </CardHeader>
 
     <CardContent>
+      <div>{bill.closed}</div>
       <p>
-        Month {String(bill.payedMonths)} / {String(bill.payMonths)}
+        Pay Month: {String(bill.payedMonths)} / {String(bill.payMonths)}
       </p>
+      <div className="flex items-center justify-between">
+        <span>
+          $<span className="text-xl font-bold">{Number(bill.payAmount)}</span> /
+          Month
+        </span>
+
+        <span>
+          {dayjs(Number(String(bill.startTime + `000`))).format("YYYY-MM-DD")}
+        </span>
+      </div>
     </CardContent>
   </Card>
 );
