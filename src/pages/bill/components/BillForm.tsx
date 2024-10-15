@@ -19,6 +19,9 @@ import { Input } from "@/components/ui/input";
 export const formSchema = z.object({
   token: z.enum(["usdt", "btc", "eth"]),
   frequency: z.enum(["monthly", "yearly"]),
+  investYears: z.coerce.number().min(1, {
+    message: "Invest years must be at least 1.",
+  }),
   rate: z.coerce.number().min(0.01, {
     message: "Rate must be at least 0.01.",
   }),
@@ -40,18 +43,6 @@ export const BillForm = ({
   form: UseFormReturn<z.infer<typeof formSchema>>;
   onSubmit: (data: z.infer<typeof formSchema>) => void;
 }) => {
-  // const form = useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //     token: "eth",
-  //     frequency: "monthly",
-  //     amount: 1000,
-  //     rate: 0.05,
-  //     retire: 35,
-  //     years: 25,
-  //   },
-  // });
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
@@ -119,6 +110,23 @@ export const BillForm = ({
 
           <FormField
             control={form.control}
+            name="investYears"
+            render={({
+              field,
+            }: {
+              field: ControllerRenderProps<z.infer<typeof formSchema>>;
+            }) => (
+              <FormItem>
+                <FormLabel>投保年限</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="输入投保年限" {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="amount"
             render={({
               field,
@@ -160,7 +168,7 @@ export const BillForm = ({
               field: ControllerRenderProps<z.infer<typeof formSchema>>;
             }) => (
               <FormItem>
-                <FormLabel>退休时间</FormLabel>
+                <FormLabel>多少年后退休</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="输入退休时间" {...field} />
                 </FormControl>

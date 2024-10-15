@@ -26,6 +26,7 @@ const Bill = () => {
       frequency: "monthly",
       amount: 1000,
       rate: 0.05,
+      investYears: 10,
       retire: 35,
       years: 25,
     },
@@ -46,6 +47,7 @@ const Bill = () => {
   console.log("🐞 => Bill => validBills:", validBills);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log('on submit ...')
     if(!isConnected){
       connect({ connector: injected(), chainId: sepolia.id });
       return;
@@ -59,7 +61,7 @@ const Bill = () => {
         // ETH-0
         COIN_ADDRESS.ETH as `0x${string}`,
         BigInt(data.amount),
-        BigInt(data.years) * 12n,
+        BigInt(data.investYears) * 12n,
         BigInt(data.retire) * 12n,
         BigInt(data.years) * 12n,
       ],
