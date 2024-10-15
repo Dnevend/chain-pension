@@ -11,7 +11,7 @@ import { CircleDashed } from "lucide-react";
 import { useEffect, useState } from "react";
 import { injected } from "wagmi/connectors";
 import { sepolia } from "wagmi/chains";
-import { GalleryHorizontalEnd, FilePlus2, RotateCcw } from 'lucide-react'
+import { FilePlus2, RotateCcw } from 'lucide-react'
 import emptyImage from '@/assets/digital-nomad.svg'
 
 const Bill = () => {
@@ -33,7 +33,7 @@ const Bill = () => {
   
   const { writeContractAsync, isPending } = useWriteContract();
 
-  const { refetch: getBills, data: bills } = useReadContract({
+  const { refetch: getBills, data: bills, isFetching } = useReadContract({
     abi,
     address: CONTRACT_ADDRESS.Pension as `0x${string}`,
     functionName: "batchGetBills",
@@ -75,17 +75,12 @@ const Bill = () => {
 
       <div className="w-full flex items-center justify-between">
         <h1 className="inline-flex items-center text-2xl font-bold">
-          <GalleryHorizontalEnd className="w-4 h-4 mr-2" />
           历史保单
 
           <Button variant="outline" className="inline-flex items-center ml-2" onClick={() => getBills()}>
-            <RotateCcw className="w-4 h-4" />
-        </Button>
-
+              {isFetching ? <CircleDashed className="animate-spin" /> : <RotateCcw className="w-4 h-4" />}
+          </Button>
         </h1>
-
-        
-          
 
         <Dialog open={open} onOpenChange={(v) => setOpen(v)}>
           <DialogTrigger className="inline-flex items-center">
